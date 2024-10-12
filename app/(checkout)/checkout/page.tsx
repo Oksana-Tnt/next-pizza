@@ -45,7 +45,7 @@ export default function Checkout() {
     if (session) {
       fetchUserInfo();
     }
-  }, [session]);
+  }, [form, session]);
   const onSubmit = async (data: CheckoutFormValues) => {
     try {
       setSubmitting(true);
