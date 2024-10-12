@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "../globals.css";
 import { Container, Header } from "@/shared/components/shared";
+import { Suspense } from "react";
 
 const nunito = Nunito({
   subsets: ["cyrillic"],
@@ -21,11 +22,13 @@ export default function CheckoutLayout({
   return (
     <main className="min-h-screen bg-[#F4F1EE]">
       <Container>
-        <Header
-          hasSearch={false}
-          hasCart={false}
-          className="border-b-gray-200"
-        />
+        <Suspense>
+          <Header
+            hasSearch={false}
+            hasCart={false}
+            className="border-b-gray-200"
+          />
+        </Suspense>
         {children}
       </Container>
     </main>

@@ -1,6 +1,8 @@
 import { prisma } from "@/prisma/prisma-client";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
     try {
         const code = req.nextUrl.searchParams.get("code");
@@ -19,6 +21,10 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "Invalid code" }, { status: 400 });
         }
 
+        // if (verificationCode.expiresAt < new Date()) {
+        //     return NextResponse.json({ error: "Code expired" }, { status: 400 });
+        // }
+
         await prisma.user.update({
             where: {
                 id: verificationCode.userId,
@@ -33,11 +39,9 @@ export async function GET(req: NextRequest) {
                 id: verificationCode.id,
             },
         });
-
         return NextResponse.redirect(new URL("/?verified", req.url));
-        
     } catch (error) {
-        console.log(error);
-        console.log("[VERIFY_GET] Server error", error);
+        console.log("[VERIFY_GET] Error", error);
+        return NextResponse.json({ error: "An unexpected error occurred" }, { status: 500 });
     }
 }
